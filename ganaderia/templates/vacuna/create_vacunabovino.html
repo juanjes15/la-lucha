@@ -1,0 +1,25 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-10 col-lg-6 mt-3 bg-body-tertiary rounded p-4">
+        <h2 class="h2">Actualizar datos de vacunación para bovinos</h2>
+        <form method="POST" action="{% url 'vacuna_bovinos_update' vacuna.id %}">
+            {% csrf_token %}
+            {{ formset.management_form }}
+            {% for form in formset %}
+                <div class="mb-3">
+                    <h4>{{ form.nombre.value }} ({{ form.etapa_y_edad.value }})</h4>
+                    {{ form.bovino_id }}
+                    {{ form.nombre }}
+                    {{ form.etapa_y_edad }}
+                    <div class="mb-2">
+                        <label for="{{ form.tipo.id_for_label }}" class="form-label">Tipo de vacuna:</label>
+                        {{ form.tipo }}
+                    </div>
+                </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary">Completar vacunación</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,19 @@
+<nav class="navbar bg-success-subtle">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'home' %}">
+            <img src="https://pixabay.com/get/g2219b58d5a10dbc3662f6a47dd205f833ce611600e9181a5bb161c488f556fe7ee77236ef58b9e5ed77f9509059783ea323f65e22510eacea8071c4a775a8b6e31ae657c62dca5a12fcecb0cac6922c7_640.png" alt="La Lucha" width="45" height="35">
+        </a>
+        <a class="navbar-brand" href="{% url 'home_g' %}">
+            <img src="https://pixabay.com/get/g14067122d7b1df1662ed65c446d53dba2aa5d148241d4c3e0b8a90eb2cd2cec1e4cec7f45490f815a724109eaff00bc9adad396c223e514722474643b02d26466c80982e0f1c216830b678f1490f635e_640.png" alt="Ganaderia" width="45" height="35">
+        </a>
+        <div class="d-flex ms-auto">
+            {% if user.is_authenticated %}
+            <span class="navbar-brand text-body-tertiary">{{ user.get_username }}</span>
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button class="btn btn-outline-danger" type="submit">Cerrar sesión</button>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+</nav>

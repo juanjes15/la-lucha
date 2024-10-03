@@ -1,0 +1,30 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-10 col-lg-6 mt-3 bg-body-tertiary rounded p-4">
+        <h2 class="h2">Añadir bovinos a la Compra #{{ compra.id }}</h2>
+
+        <form method="GET" class="mb-4">
+            <div class="form-group">
+                <label for="num_bovinos">¿Cuántos bovinos se compraron?:</label>
+                <input type="number" name="num_bovinos" id="num_bovinos" value="{{ num_bovinos }}" min="1"
+                    class="form-control">
+            </div>
+            <button type="submit" class="btn btn-secondary mt-2">Actualizar número de formularios</button>
+        </form>
+
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="num_bovinos" value="{{ num_bovinos }}">
+            {% for form in forms %}
+            <h3>Bovino #{{ forloop.counter }}</h3>
+            {{ form.as_p }}
+            {% endfor %}
+            <button type="submit" class="btn btn-primary">Guardar Bovinos</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

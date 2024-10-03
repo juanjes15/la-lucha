@@ -1,0 +1,116 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<header class="row justify-content-center">
+    <div class="col-11 bg-body-secondary mt-3 rounded p-4">
+        <h2 class="h2 text-center">Ganaderia</h2>
+        <ul class="list-unstyled">
+            <li>
+                <a href="{% url 'create_bovino' %}"
+                    class="my-1 btn btn-success d-flex align-items-center text-decoration-none">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2865/2865719.png" alt="Ganaderia" width="45"
+                        height="35" class="me-2">
+                    <span>Registrar nacimiento</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'create_compra' %}"
+                    class="my-1 btn btn-success d-flex align-items-center text-decoration-none">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2865/2865719.png" alt="Ganaderia" width="45"
+                        height="35" class="me-2">
+                    <span>Registrar compra</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'create_venta' %}"
+                    class="my-1 btn btn-success d-flex align-items-center text-decoration-none">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2865/2865719.png" alt="Ganaderia" width="45"
+                        height="35" class="me-2">
+                    <span>Registrar venta</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'create_vacuna' %}"
+                    class="my-1 btn btn-success d-flex align-items-center text-decoration-none">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2865/2865719.png" alt="Ganaderia" width="45"
+                        height="35" class="me-2">
+                    <span>Registrar vacuna</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</header>
+
+<div class="row justify-content-center">
+    <div class="col-11 bg-body-secondary mt-3 rounded p-4">
+        <h4 class="h4 text-center">Buscador</h4>
+        <form action="{% url 'home_g' %}">
+            <input class="form-control" name="q" value="{{ request.GET.q }}"
+                placeholder="Buscar por nombre, fecha de nacimiento o madre">
+        </form>
+        <section class="mt-4" id="results">
+            <div class="results">
+                {% for bovino in page.object_list %}
+                <div class="card my-2 bg-warning-subtle">
+                    <a class="text-decoration-none text-dark" href="#">
+                        <div class="card-body">
+                            <h5 class="h5 card-title">{{bovino.nombre}}</h5>
+                            <h6 class="h6 card-subtitle mb-2 text-body-secondary">{{bovino.etapa_y_edad}}</h6>
+                            <p class="card-text">
+                                Topizado:
+                                {% if bovino.topizado %}
+                                <span style="color: green;">✓</span>
+                                {% else %}
+                                <span style="color: red;">✗</span>
+                                {% endif %}
+                            </p>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            <nav class="mt-2 mb-5" aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    {% if page %}
+                    {% if page.number != 1 %}
+                    <li class="page-item">
+                        <a class="page-link" href="?q={{ request.GET.q }}&page=1">
+                            &laquo; Primera
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if page.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?q={{ request.GET.q }}&page={{ page.previous_page_number }}">
+                            {{ page.previous_page_number }}
+                        </a>
+                    </li>
+                    {% endif %}
+                    <li class="page-item">
+                        <span class="page-link">
+                            {{ page.number }}
+                        </span>
+                    </li>
+                    {% if page.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?q={{ request.GET.q }}&page={{ page.next_page_number }}">
+                            {{ page.next_page_number }}
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if page.number != page.paginator.num_pages %}
+                    <li class="page-item">
+                        <a class="page-link" href="?q={{ request.GET.q }}&page={{ page.paginator.num_pages }}">
+                            &raquo; Ultima
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% endif %}
+                </ul>
+            </nav>
+        </section>
+    </div>
+</div>
+
+{% endblock %}

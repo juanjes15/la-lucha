@@ -1,0 +1,19 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-10 col-lg-6 mt-3 bg-body-tertiary rounded p-4">
+        <h2 class="h2">Actualizar datos de bovinos para la venta</h2>
+        <form method="POST" action="{% url 'venta_bovinos_update' venta.id %}">
+            {% csrf_token %}
+            {{ formset.management_form }}
+            {% for form in formset %}
+                <div class="mb-3">
+                    <h4>Bovino {{ forloop.counter }}</h4>
+                    {{ form.as_p }}
+                </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary">Completar venta</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

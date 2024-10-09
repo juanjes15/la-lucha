@@ -25,14 +25,13 @@ def home_g(request):
     # Búsqueda y paginación
     search = request.GET.get("q")
     page_num = request.GET.get("page", 1)
+    bovinos = Bovino.objects.filter(venta__isnull=True)
     if search:
-        bovinos = Bovino.objects.filter(
+        bovinos = bovinos.filter(
             Q(nombre__icontains=search)
             | Q(fecha_nacimiento__icontains=search)
             | Q(madre__icontains=search)
         )
-    else:
-        bovinos = Bovino.objects.filter(venta__isnull=True)
     page = Paginator(object_list=bovinos, per_page=5).get_page(page_num)
     
     # Entrada de datos
@@ -59,7 +58,7 @@ def home_g(request):
         },
     ]
     
-    # Contexto actualizado
+    # Datos enviados al template
     context = {
         "page": page,
         "inputs": inputs
@@ -89,6 +88,16 @@ def detail_bovino(request, bovino_id):
     bovino = get_object_or_404(Bovino, id=bovino_id)
     return render(
         request, "detail_bovino.html", {"bovino": bovino}
+    )
+
+
+# EDITAR BOVINO
+@login_required
+def edit_bovino(request, bovino_id):
+    # Vista para ver el detalle del bovino
+    bovino = get_object_or_404(Bovino, id=bovino_id)
+    return render(
+        request, "edit_bovino.html", {"bovino": bovino}
     )
 
 

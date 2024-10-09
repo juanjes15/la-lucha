@@ -28,6 +28,8 @@ class BovinoForm(ModelForm):
             "precio_venta",
             "peso_compra",
             "peso_venta",
+            "topizado",
+            "capado",
         ]
         widgets = {
             "nombre": TextInput(attrs={"class": "form-control"}),
@@ -37,7 +39,6 @@ class BovinoForm(ModelForm):
             "sexo": RadioSelect(),
             "madre": TextInput(attrs={"class": "form-control"}),
             "padre": TextInput(attrs={"class": "form-control"}),
-            "topizado": RadioSelect(),
             "observaciones": Textarea(
                 attrs={"class": "form-control", "style": "height: 100px"}
             ),
@@ -82,6 +83,7 @@ class CreateBovinosCompraForm(ModelForm):
             "precio_compra": NumberInput(attrs={"class": "form-control"}),
             "peso_compra": NumberInput(attrs={"class": "form-control"}),
             "topizado": RadioSelect(),
+            "capado": RadioSelect(),
             "observaciones": Textarea(
                 attrs={"class": "form-control", "style": "height: 100px"}
             ),

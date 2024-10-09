@@ -61,7 +61,8 @@ class Bovino(Model):
     precio_venta = PositiveIntegerField(verbose_name="Precio de venta", null=True)
     peso_compra = SmallIntegerField(verbose_name="Peso al comprar (kg)", null=True)
     peso_venta = SmallIntegerField(verbose_name="Peso al vender (kg)", null=True)
-    topizado = BooleanField(verbose_name="¿Está topizado?", choices=((True, "Si"), (False, "No")))
+    topizado = BooleanField(verbose_name="¿Está topizado?", default=False, choices=((True, "Si"), (False, "No")))
+    capado = BooleanField(verbose_name="¿Está capado?", default=False, choices=((True, "Si"), (False, "No")))
     observaciones = TextField(verbose_name="Observaciones (opcional)", blank=True)
     compra = ForeignKey(Compra, on_delete=CASCADE, blank=True, null=True)
     venta = ForeignKey(Venta, on_delete=CASCADE, blank=True, null=True)
@@ -84,7 +85,7 @@ class Bovino(Model):
                 return "Becerro"
             elif 6 < edad_meses <= 12:
                 return "Ternero"
-            elif 12 < edad_meses <= 36:
+            elif (12 < edad_meses <= 36) or self.capado:
                 return "Novillo"
             else:
                 return "Toro"
@@ -116,7 +117,7 @@ class Bovino(Model):
                 return f"{etapa} ({años} años, {meses} meses)"
             
     class Meta:
-        ordering = ["nombre"]
+        ordering = ["fecha_nacimiento"]
 
 
 class VacunaBovino(Model):

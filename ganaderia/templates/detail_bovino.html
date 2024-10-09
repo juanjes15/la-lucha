@@ -1,19 +1,82 @@
 {% extends 'layout.html' %}
+{% load static %}
+
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-10 col-lg-6 mt-3 bg-body-tertiary rounded p-4">
-        <h2 class="h2">{{ bovino.nombre }}</h2>
-        <ul>
-            <li>Fecha de nacimiento: {{ bovino.fecha_nacimiento }}</li>
-            <li>Sexo: {{ bovino.sexo }}</li>
-            <li>Madre: {{ bovino.madre }}</li>
-            <li>Padre: {{ bovino.padre }}</li>
-            <li>Precio al momento de comprar: {{ bovino.precio_compra }}</li>
-            <li>Peso al momento de comprar: {{ bovino.peso_compra }}</li>
-            <li>Topizado: {{ bovino.topizado }}</li>
-            <li>Observaciones: {{ bovino.observaciones }}</li>
-        </ul>
-        <a href="{% url 'home_g' %}" class="btn btn-primary">Volver al inicio</a>
+<div class="container py-4 bg-light-brown">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body">
+                    <h1 class="card-title h2 text-dark-green mb-4">{{ bovino.nombre }}</h1>
+                    <h2 class="card-subtitle h4 text-muted mb-4">{{ bovino.etapa_y_edad }}</h2>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h3 class="h5 text-dark-green">Información General</h3>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item bg-transparent"><strong>Fecha de nacimiento:</strong> {{ bovino.fecha_nacimiento }}</li>
+                                <li class="list-group-item bg-transparent"><strong>Sexo:</strong> {% if bovino.sexo %}Macho{% else %}Hembra{% endif %}</li>
+                                <li class="list-group-item bg-transparent"><strong>Madre:</strong> {% if bovino.madre == "" %}No registra{% else %}{{ bovino.madre }}{% endif %}</li>
+                                <li class="list-group-item bg-transparent"><strong>Padre:</strong> {% if bovino.padre == "" %}No registra{% else %}{{ bovino.padre }}{% endif %}</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h3 class="h5 text-dark-green">Detalles Adicionales</h3>
+                            <ul class="list-group list-group-flush">
+                                {% if not bovino.compra is None %}
+                                    <li class="list-group-item bg-transparent"><strong>Metodo de adquisición:</strong> <span class="badge bg-warning text-dark">Compra</span></li>
+                                    <li class="list-group-item bg-transparent"><strong>Precio de compra:</strong> {{ bovino.precio_compra }}</li>
+                                    <li class="list-group-item bg-transparent"><strong>Peso de compra:</strong> {{ bovino.peso_compra }}</li>
+                                {% else %}
+                                    <li class="list-group-item bg-transparent"><strong>Metodo de adquisición:</strong> <span class="badge bg-success">Nacimiento</span></li>
+                                {% endif %}
+                                <li class="list-group-item bg-transparent">
+                                    <strong>Topizado:</strong> 
+                                    {% if bovino.topizado %}
+                                        <span class="badge bg-success">Sí</span>
+                                    {% else %}
+                                        <span class="badge bg-danger">No</span>
+                                    {% endif %}
+                                </li>
+                                {% if bovino.sexo %}
+                                    <li class="list-group-item bg-transparent">
+                                        <strong>Capado:</strong> 
+                                        {% if bovino.capado %}
+                                            <span class="badge bg-success">Sí</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">No</span>
+                                        {% endif %}
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    {% if bovino.observaciones %}
+                    <div class="mb-4">
+                        <h3 class="h5 text-dark-green">Observaciones</h3>
+                        <p class="card-text">{{ bovino.observaciones }}</p>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'home_g' %}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left"></i> Volver al inicio
+                        </a>
+                        <a href="{% url 'edit_bovino' bovino.id %}" class="btn btn-success">
+                            <i class="bi bi-pencil"></i> Editar
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .bg-light-brown { background-color: #efebe9; }
+    .text-dark-green { color: #2e7d32; }
+</style>
 {% endblock %}

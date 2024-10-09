@@ -5,6 +5,7 @@ urlpatterns = [
     path("", views.home_g, name="home_g"),
     path("create_bovino/", views.create_bovino, name="create_bovino"),
     path("bovino/<int:bovino_id>/detail/", views.detail_bovino, name="detail_bovino"),
+    path("bovino/<int:bovino_id>/edit/", views.edit_bovino, name="edit_bovino"),
     # Compra
     path("compra/create/", views.create_compra, name="create_compra"),
     path("compra/<int:compra_id>/bovinos/", views.create_bovinos_compra, name="create_bovinos_compra"),

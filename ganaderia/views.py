@@ -16,14 +16,15 @@ from django.db.models import Q
 from django.core.paginator import Paginator
 from django.forms import modelformset_factory, formset_factory
 from django.core.exceptions import ValidationError
+from django.urls import reverse
 
 
 # HOME GANADERIA
 @login_required
 def home_g(request):
+    # Búsqueda y paginación
     search = request.GET.get("q")
     page_num = request.GET.get("page", 1)
-
     if search:
         bovinos = Bovino.objects.filter(
             Q(nombre__icontains=search)
@@ -31,9 +32,40 @@ def home_g(request):
             | Q(madre__icontains=search)
         )
     else:
-        bovinos = Bovino.objects.all()
+        bovinos = Bovino.objects.filter(venta__isnull=True)
     page = Paginator(object_list=bovinos, per_page=5).get_page(page_num)
-    return render(request=request, template_name="home_g.html", context={"page": page})
+    
+    # Entrada de datos
+    inputs = [
+        {
+            'name': 'Registrar nacimiento',
+            'url': reverse('create_bovino'),
+            'img': 'https://i.imgur.com/8At2a8G.jpeg'
+        },
+        {
+            'name': 'Registrar compra',
+            'url': reverse('create_compra'),
+            'img': 'https://i.imgur.com/M9RvBpQ.jpeg'
+        },
+        {
+            'name': 'Registrar venta',
+            'url': reverse('create_venta'),
+            'img': 'https://i.imgur.com/t1yJeSc.jpeg'
+        },
+        {
+            'name': 'Registrar vacuna',
+            'url': reverse('create_vacuna'),
+            'img': 'https://i.imgur.com/zeOYtE3.jpeg'
+        },
+    ]
+    
+    # Contexto actualizado
+    context = {
+        "page": page,
+        "inputs": inputs
+    }
+   
+    return render(request=request, template_name="home_g.html", context=context)
 
 
 # NACIMIENTO
@@ -48,6 +80,16 @@ def create_bovino(request):
     else:
         form = BovinoForm()
     return render(request, "create_bovino.html", {"form": form})
+
+
+# DETALLE BOVINO
+@login_required
+def detail_bovino(request, bovino_id):
+    # Vista para ver el detalle del bovino
+    bovino = get_object_or_404(Bovino, id=bovino_id)
+    return render(
+        request, "detail_bovino.html", {"bovino": bovino}
+    )
 
 
 # COMPRA

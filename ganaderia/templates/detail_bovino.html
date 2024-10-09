@@ -1,0 +1,19 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-10 col-lg-6 mt-3 bg-body-tertiary rounded p-4">
+        <h2 class="h2">{{ bovino.nombre }}</h2>
+        <ul>
+            <li>Fecha de nacimiento: {{ bovino.fecha_nacimiento }}</li>
+            <li>Sexo: {{ bovino.sexo }}</li>
+            <li>Madre: {{ bovino.madre }}</li>
+            <li>Padre: {{ bovino.padre }}</li>
+            <li>Precio al momento de comprar: {{ bovino.precio_compra }}</li>
+            <li>Peso al momento de comprar: {{ bovino.peso_compra }}</li>
+            <li>Topizado: {{ bovino.topizado }}</li>
+            <li>Observaciones: {{ bovino.observaciones }}</li>
+        </ul>
+        <a href="{% url 'home_g' %}" class="btn btn-primary">Volver al inicio</a>
+    </div>
+</div>
+{% endblock %}

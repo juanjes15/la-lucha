@@ -1,116 +1,143 @@
 {% extends "layout.html" %}
+{% load static %}
 
 {% block content %}
-
-<header class="row justify-content-center">
-    <div class="col-11 bg-body-secondary mt-3 rounded p-4">
-        <h2 class="h2 text-center">Ganaderia</h2>
-        <ul class="list-unstyled">
-            <li>
-                <a href="{% url 'create_bovino' %}"
-                    class="my-1 btn btn-success d-flex align-items-center text-decoration-none">
-                    <img src="https://cdn-icons-png.flaticon.com/512/2865/2865719.png" alt="Ganaderia" width="45"
-                        height="35" class="me-2">
-                    <span>Registrar nacimiento</span>
-                </a>
-            </li>
-            <li>
-                <a href="{% url 'create_compra' %}"
-                    class="my-1 btn btn-success d-flex align-items-center text-decoration-none">
-                    <img src="https://cdn-icons-png.flaticon.com/512/2865/2865719.png" alt="Ganaderia" width="45"
-                        height="35" class="me-2">
-                    <span>Registrar compra</span>
-                </a>
-            </li>
-            <li>
-                <a href="{% url 'create_venta' %}"
-                    class="my-1 btn btn-success d-flex align-items-center text-decoration-none">
-                    <img src="https://cdn-icons-png.flaticon.com/512/2865/2865719.png" alt="Ganaderia" width="45"
-                        height="35" class="me-2">
-                    <span>Registrar venta</span>
-                </a>
-            </li>
-            <li>
-                <a href="{% url 'create_vacuna' %}"
-                    class="my-1 btn btn-success d-flex align-items-center text-decoration-none">
-                    <img src="https://cdn-icons-png.flaticon.com/512/2865/2865719.png" alt="Ganaderia" width="45"
-                        height="35" class="me-2">
-                    <span>Registrar vacuna</span>
-                </a>
-            </li>
-        </ul>
-    </div>
-</header>
-
-<div class="row justify-content-center">
-    <div class="col-11 bg-body-secondary mt-3 rounded p-4">
-        <h4 class="h4 text-center">Buscador</h4>
-        <form action="{% url 'home_g' %}">
-            <input class="form-control" name="q" value="{{ request.GET.q }}"
-                placeholder="Buscar por nombre, fecha de nacimiento o madre">
-        </form>
-        <section class="mt-4" id="results">
-            <div class="results">
-                {% for bovino in page.object_list %}
-                <div class="card my-2 bg-warning-subtle">
-                    <a class="text-decoration-none text-dark" href="#">
-                        <div class="card-body">
-                            <h5 class="h5 card-title">{{bovino.nombre}}</h5>
-                            <h6 class="h6 card-subtitle mb-2 text-body-secondary">{{bovino.etapa_y_edad}}</h6>
-                            <p class="card-text">
-                                Topizado:
-                                {% if bovino.topizado %}
-                                <span style="color: green;">✓</span>
-                                {% else %}
-                                <span style="color: red;">✗</span>
-                                {% endif %}
-                            </p>
-                        </div>
-                    </a>
-                </div>
-                {% endfor %}
+<div class="container-fluid py-4 bg-light-brown">
+    <!-- Sección 1: Título, imagen y descripción -->
+    <section class="mb-5">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <h1 class="display-4 text-dark-green">Ganadería</h1>
+                <p class="lead text-brown">Bienvenido a la sección de Ganadería. Aquí podrás gestionar todos los aspectos relacionados con nuestro ganado, desde registros de nacimientos hasta vacunaciones.</p>
             </div>
-            <nav class="mt-2 mb-5" aria-label="Page navigation">
-                <ul class="pagination justify-content-center">
-                    {% if page %}
-                    {% if page.number != 1 %}
-                    <li class="page-item">
-                        <a class="page-link" href="?q={{ request.GET.q }}&page=1">
-                            &laquo; Primera
-                        </a>
-                    </li>
-                    {% endif %}
-                    {% if page.has_previous %}
-                    <li class="page-item">
-                        <a class="page-link" href="?q={{ request.GET.q }}&page={{ page.previous_page_number }}">
-                            {{ page.previous_page_number }}
-                        </a>
-                    </li>
-                    {% endif %}
-                    <li class="page-item">
-                        <span class="page-link">
-                            {{ page.number }}
-                        </span>
-                    </li>
-                    {% if page.has_next %}
-                    <li class="page-item">
-                        <a class="page-link" href="?q={{ request.GET.q }}&page={{ page.next_page_number }}">
-                            {{ page.next_page_number }}
-                        </a>
-                    </li>
-                    {% endif %}
-                    {% if page.number != page.paginator.num_pages %}
-                    <li class="page-item">
-                        <a class="page-link" href="?q={{ request.GET.q }}&page={{ page.paginator.num_pages }}">
-                            &raquo; Ultima
-                        </a>
-                    </li>
-                    {% endif %}
-                    {% endif %}
-                </ul>
-            </nav>
-        </section>
-    </div>
-</div>
+            <div class="col-lg-6">
+                <img src="https://i.imgur.com/DUy9ytt.jpeg" alt="Ganaderia" class="img-fluid rounded shadow-lg">
+            </div>
+        </div>
+    </section>
 
+    <!-- Sección 2: Entrada de datos -->
+    <section class="mb-5">
+        <h2 class="h3 text-dark-green mb-4">Entrada de datos</h2>
+        <div class="row g-4">
+            {% for input in inputs %}
+            <div class="col-md-3 col-sm-6">
+                <a href="{{ input.url }}" class="card h-100 border-0 shadow-sm text-decoration-none">
+                    <div class="card-body text-center">
+                        <img src="{{ input.img }}" alt="{{ input.name }}" width="150" class="mb-3">
+                        <h3 class="h5 text-dark-green">{{ input.name }}</h3>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Sección 3: Lista de bovinos -->
+    <section class="mb-5">
+        <h2 class="h3 text-dark-green mb-4">Lista de Bovinos Actuales</h2>
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <form action="{% url 'home_g' %}" class="mb-4">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="q" value="{{ request.GET.q }}" placeholder="Buscar por nombre, fecha de nacimiento o madre">
+                        <button class="btn btn-outline-success" type="submit">Buscar</button>
+                    </div>
+                </form>
+                
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                    {% for bovino in page.object_list %}
+                    <div class="col">
+                        <div class="card h-100 border-0 shadow-sm {% if bovino.topizado %}bg-success-subtle{% else %}bg-warning-subtle{% endif %}">
+                            <div class="card-body">
+                                <h4 class="h5 card-title text-dark-green">{{ bovino.nombre }}</h4>
+                                <h5 class="h6 card-subtitle mb-2 text-muted">{{ bovino.etapa_y_edad }}</h5>
+                                <p class="card-text">
+                                    Topizado: 
+                                    {% if bovino.topizado %}
+                                    <span class="badge bg-success">Sí</span>
+                                    {% else %}
+                                    <span class="badge bg-warning text-dark">No</span>
+                                    {% endif %}
+                                </p>
+                                <a href="{% url 'detail_bovino' bovino.id %}" class="btn btn-outline-success btn-sm">Ver detalles</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <nav class="mt-4" aria-label="Navegación de páginas">
+                    <ul class="pagination justify-content-center">
+                        {% if page.has_previous %}
+                            <li class="page-item"><a class="page-link" href="?q={{ request.GET.q }}&page=1">&laquo; Primera</a></li>
+                            <li class="page-item"><a class="page-link" href="?q={{ request.GET.q }}&page={{ page.previous_page_number }}">Anterior</a></li>
+                        {% endif %}
+                        
+                        <li class="page-item active"><span class="page-link">{{ page.number }} de {{ page.paginator.num_pages }}</span></li>
+                        
+                        {% if page.has_next %}
+                            <li class="page-item"><a class="page-link" href="?q={{ request.GET.q }}&page={{ page.next_page_number }}">Siguiente</a></li>
+                            <li class="page-item"><a class="page-link" href="?q={{ request.GET.q }}&page={{ page.paginator.num_pages }}">Última &raquo;</a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección 4: Historial de compras, ventas y vacunas -->
+    <section>
+        <h2 class="h3 text-dark-green mb-4">Historial de Actividades</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <h3 class="h5 text-dark-green mb-3">Últimas Compras</h3>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Compra #12345 - 05/04/2024</li>
+                            <li class="list-group-item">Compra #12344 - 01/04/2024</li>
+                            <li class="list-group-item">Compra #12343 - 28/03/2024</li>
+                        </ul>
+                        <a href="#" class="btn btn-outline-success btn-sm mt-3">Ver todas las compras</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <h3 class="h5 text-dark-green mb-3">Últimas Ventas</h3>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Venta #56789 - 04/04/2024</li>
+                            <li class="list-group-item">Venta #56788 - 30/03/2024</li>
+                            <li class="list-group-item">Venta #56787 - 25/03/2024</li>
+                        </ul>
+                        <a href="#" class="btn btn-outline-success btn-sm mt-3">Ver todas las ventas</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <h3 class="h5 text-dark-green mb-3">Últimas Vacunas</h3>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Vacuna #98765 - 06/04/2024</li>
+                            <li class="list-group-item">Vacuna #98764 - 03/04/2024</li>
+                            <li class="list-group-item">Vacuna #98763 - 01/04/2024</li>
+                        </ul>
+                        <a href="#" class="btn btn-outline-success btn-sm mt-3">Ver todas las vacunas</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .bg-light-brown { background-color: #efebe9; }
+    .text-dark-green { color: #2e7d32; }
+    .text-brown { color: #4e342e; }
+</style>
 {% endblock %}

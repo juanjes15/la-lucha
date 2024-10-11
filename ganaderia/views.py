@@ -84,7 +84,7 @@ def create_bovino(request):
 # DETALLE BOVINO
 @login_required
 def detail_bovino(request, bovino_id):
-    # Vista para ver el detalle del bovino
+    # Vista para ver el detalle de un bovino
     bovino = get_object_or_404(Bovino, id=bovino_id)
     return render(
         request, "detail_bovino.html", {"bovino": bovino}
@@ -94,10 +94,17 @@ def detail_bovino(request, bovino_id):
 # EDITAR BOVINO
 @login_required
 def edit_bovino(request, bovino_id):
-    # Vista para ver el detalle del bovino
+    # Vista para editar un bovino
     bovino = get_object_or_404(Bovino, id=bovino_id)
+    if request.method == "POST":
+        form = CreateBovinosCompraForm(request.POST, instance=bovino)
+        if form.is_valid():
+            bovino.save()
+            return redirect("detail_bovino", bovino_id=bovino_id)
+    else:
+        form = CreateBovinosCompraForm(instance=bovino)
     return render(
-        request, "edit_bovino.html", {"bovino": bovino}
+        request, "edit_bovino.html", {"form": form}
     )
 
 

@@ -104,7 +104,7 @@ def edit_bovino(request, bovino_id):
     else:
         form = CreateBovinosCompraForm(instance=bovino)
     return render(
-        request, "edit_bovino.html", {"form": form}
+        request, "edit_bovino.html", {"form": form, "bovino_id": bovino_id}
     )
 
 

@@ -73,21 +73,23 @@ class CreateBovinosCompraForm(ModelForm):
             "peso_venta",
         ]
         widgets = {
-            "nombre": TextInput(attrs={"class": "form-control"}),
             "fecha_nacimiento": DateInput(
-                format=("%Y-%m-%d"), attrs={"type": "date", "class": "form-control"}
+                format=("%Y-%m-%d"),
+                attrs={"type": "date"}
             ),
             "sexo": RadioSelect(),
-            "madre": TextInput(attrs={"class": "form-control"}),
-            "padre": TextInput(attrs={"class": "form-control"}),
-            "precio_compra": NumberInput(attrs={"class": "form-control"}),
-            "peso_compra": NumberInput(attrs={"class": "form-control"}),
             "topizado": RadioSelect(),
             "capado": RadioSelect(),
             "observaciones": Textarea(
-                attrs={"class": "form-control", "style": "height: 100px"}
+                attrs={"style": "height: 100px"}
             ),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            if isinstance(field.widget, (TextInput, NumberInput, DateInput, Textarea)):
+                field.widget.attrs.update({'class': 'form-control'})
 
 
 # VENTA

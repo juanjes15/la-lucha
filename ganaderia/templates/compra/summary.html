@@ -1,0 +1,63 @@
+{% extends 'layout.html' %}
+{% load custom_filters %}
+
+{% block content %}
+<div class="container py-4 bg-light-brown">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body">
+                    <h1 class="card-title h2 text-dark-green mb-3">Resumen Compra #{{ compra.id }}</h1>
+                    
+                    <h2 class="h4 mb-3">Detalles de la Compra</h2>
+                    <p><strong>Vendedor:</strong> {{ compra.vendedor }}</p>
+                    <p><strong>Fecha:</strong> {{ compra.fecha }}</p>
+                    <p><strong>Gastos adicionales:</strong> ${{ compra.gastos|format_number }}</p>
+                    {% if bovino.observaciones %}
+                        <p><strong>Observaciones:</strong> {{ compra.observaciones }}</p>
+                    {% endif %}
+                    <div class="d-flex justify-content-between mt-4">
+                        <a href="{% url 'edit_compra' compra.id %}" class="btn btn-success">
+                            <i class="bi bi-pencil"></i> Editar
+                        </a>
+                    </div>
+                    
+                    <h2 class="h4 mb-3 mt-4">Bovinos Comprados</h2>
+                    <ul class="list-group mb-3">
+                        {% for bovino in bovinos %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <strong>{{ bovino.nombre }}</strong>
+                            Precio: ${{ bovino.precio_compra|format_number }}, Peso: {{ bovino.peso_compra }} kg
+                            <a href="{% url 'detail_bovino' bovino.id %}" class="btn btn-outline-success btn-sm">Ver detalles</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+
+                    <h2 class="h4 mb-3">Resumen Financiero</h2>
+                    <p><strong>Total precio bovinos:</strong> ${{ precio_bovinos|format_number }}</p>
+                    <p><strong>Gastos adicionales:</strong> ${{ compra.gastos|format_number }}</p>
+                    <p><strong>Total de la compra:</strong> ${{ total_compra|format_number }}</p>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'home_g' %}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left"></i> Volver al inicio
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .bg-light-brown {
+        background-color: #efebe9;
+    }
+
+    .text-dark-green {
+        color: #2e7d32;
+    }
+</style>
+{% endblock %}

@@ -1,5 +1,5 @@
 {% extends 'layout.html' %}
-{% load static %}
+{% load custom_filters %}
 
 {% block content %}
 <div class="container py-4 bg-light-brown">
@@ -24,8 +24,8 @@
                             <h3 class="h5 text-dark-green">Detalles Adicionales</h3>
                             <ul class="list-group list-group-flush">
                                 {% if not bovino.compra is None %}
-                                    <li class="list-group-item bg-transparent"><strong>Metodo de adquisición:</strong> <span class="badge bg-warning text-dark">Compra</span></li>
-                                    <li class="list-group-item bg-transparent"><strong>Precio de compra:</strong> {{ bovino.precio_compra }}</li>
+                                    <li class="list-group-item bg-transparent"><strong>Metodo de adquisición:</strong> <span class="badge bg-warning text-dark">Compra</span> <a href="{% url 'summary_compra' bovino.compra.id %}" class="btn btn-outline-success btn-sm">Ver detalles</a></li>
+                                    <li class="list-group-item bg-transparent"><strong>Precio de compra:</strong> ${{ bovino.precio_compra|format_number }}</li>
                                     <li class="list-group-item bg-transparent"><strong>Peso de compra:</strong> {{ bovino.peso_compra }}</li>
                                 {% else %}
                                     <li class="list-group-item bg-transparent"><strong>Metodo de adquisición:</strong> <span class="badge bg-success">Nacimiento</span></li>

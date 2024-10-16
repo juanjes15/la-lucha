@@ -17,6 +17,7 @@ from django.core.paginator import Paginator
 from django.forms import modelformset_factory, formset_factory
 from django.core.exceptions import ValidationError
 from django.urls import reverse
+from django.db.models import Sum
 
 
 # HOME GANADERIA
@@ -33,41 +34,38 @@ def home_g(request):
             | Q(madre__icontains=search)
         )
     page = Paginator(object_list=bovinos, per_page=5).get_page(page_num)
-    
+
     # Entrada de datos
     inputs = [
         {
-            'name': 'Registrar nacimiento',
-            'url': reverse('create_bovino'),
-            'img': 'https://i.imgur.com/8At2a8G.jpeg'
+            "name": "Registrar bovino",
+            "url": reverse("create_bovino"),
+            "img": "https://i.imgur.com/8At2a8G.jpeg",
         },
         {
-            'name': 'Registrar compra',
-            'url': reverse('create_compra'),
-            'img': 'https://i.imgur.com/M9RvBpQ.jpeg'
+            "name": "Registrar compra",
+            "url": reverse("create_compra"),
+            "img": "https://i.imgur.com/M9RvBpQ.jpeg",
         },
         {
-            'name': 'Registrar venta',
-            'url': reverse('create_venta'),
-            'img': 'https://i.imgur.com/t1yJeSc.jpeg'
+            "name": "Registrar venta",
+            "url": reverse("create_venta"),
+            "img": "https://i.imgur.com/t1yJeSc.jpeg",
         },
         {
-            'name': 'Registrar vacuna',
-            'url': reverse('create_vacuna'),
-            'img': 'https://i.imgur.com/zeOYtE3.jpeg'
+            "name": "Registrar vacuna",
+            "url": reverse("create_vacuna"),
+            "img": "https://i.imgur.com/zeOYtE3.jpeg",
         },
     ]
-    
+
     # Datos enviados al template
-    context = {
-        "page": page,
-        "inputs": inputs
-    }
-   
+    context = {"page": page, "inputs": inputs}
+
     return render(request=request, template_name="home_g.html", context=context)
 
 
-# NACIMIENTO
+# BOVINO
 @login_required
 def create_bovino(request):
     # Vista para crear un bovino (por nacimiento)
@@ -81,21 +79,18 @@ def create_bovino(request):
     return render(request, "create_bovino.html", {"form": form})
 
 
-# DETALLE BOVINO
 @login_required
 def detail_bovino(request, bovino_id):
     # Vista para ver el detalle de un bovino
     bovino = get_object_or_404(Bovino, id=bovino_id)
-    return render(
-        request, "detail_bovino.html", {"bovino": bovino}
-    )
+    return render(request, "detail_bovino.html", {"bovino": bovino})
 
 
-# EDITAR BOVINO
 @login_required
 def edit_bovino(request, bovino_id):
     # Vista para editar un bovino
     bovino = get_object_or_404(Bovino, id=bovino_id)
+    is_born = bovino.compra is None
     if request.method == "POST":
         form = CreateBovinosCompraForm(request.POST, instance=bovino)
         if form.is_valid():
@@ -104,7 +99,9 @@ def edit_bovino(request, bovino_id):
     else:
         form = CreateBovinosCompraForm(instance=bovino)
     return render(
-        request, "edit_bovino.html", {"form": form, "bovino_id": bovino_id}
+        request,
+        "edit_bovino.html",
+        {"form": form, "bovino_id": bovino_id, "is_born": is_born},
     )
 
 
@@ -123,6 +120,24 @@ def create_compra(request):
 
 
 @login_required
+def edit_compra(request, compra_id):
+    # Vista para editar un bovino
+    compra = get_object_or_404(Compra, id=compra_id)
+    if request.method == "POST":
+        form = CompraForm(request.POST, instance=compra)
+        if form.is_valid():
+            compra.save()
+            return redirect("summary_compra", compra_id=compra_id)
+    else:
+        form = CompraForm(instance=compra)
+    return render(
+        request,
+        "compra/edit.html",
+        {"form": form, "compra_id": compra_id},
+    )
+
+
+@login_required
 def create_bovinos_compra(request, compra_id):
     # Vista para crear bovinos (por medio de una compra)
     compra = get_object_or_404(Compra, id=compra_id)
@@ -138,7 +153,7 @@ def create_bovinos_compra(request, compra_id):
                 bovino = form.save(commit=False)
                 bovino.compra = compra
                 bovino.save()
-            return redirect("home_g")
+            return redirect("summary_compra", compra_id=compra.id)
     else:
         num_bovinos = int(request.GET.get("num_bovinos", 1))
         forms = [CreateBovinosCompraForm(prefix=str(x)) for x in range(num_bovinos)]
@@ -150,7 +165,25 @@ def create_bovinos_compra(request, compra_id):
     )
 
 
-# TODO: summary_compra "vista para ver el resumen de la compra"
+@login_required
+def summary_compra(request, compra_id):
+    # Vista para ver el resumen de la compra
+    compra = get_object_or_404(Compra, id=compra_id)
+    bovinos_comprados = Bovino.objects.filter(compra=compra)
+    precio_bovinos = (
+        bovinos_comprados.aggregate(Sum("precio_compra"))["precio_compra__sum"] or 0
+    )
+    total_compra = precio_bovinos + compra.gastos
+    return render(
+        request,
+        "compra/summary.html",
+        {
+            "compra": compra,
+            "bovinos": bovinos_comprados,
+            "precio_bovinos": precio_bovinos,
+            "total_compra": total_compra,
+        },
+    )
 
 
 # VENTA

@@ -1,5 +1,4 @@
 {% extends 'layout.html' %}
-{% load static %}
 
 {% block content %}
 <div class="container py-4 bg-light-brown">
@@ -16,27 +15,32 @@
                     <form method="POST">
                         {% csrf_token %}
                         {% for field in form %}
-                            <div class="mb-3">
-                                <label for="{{ field.id_for_label }}" class="form-label">
-                                    {{ field.label }}
-                                    {% if field.field.required %}
-                                        <span class="text-danger">*</span>
-                                    {% endif %}
-                                </label>
-                                {% if field.field.widget.input_type == 'radio' %}
-                                    <div>
+                            {% if is_born and field.name in 'precio_compra,peso_compra' %}
+                                {# Si nació, no es necesario mostrar precio_compra y peso_compra #}
+                                {{ field.as_hidden }}
+                            {% else %}
+                                <div class="mb-3">
+                                    <label for="{{ field.id_for_label }}" class="form-label">
+                                        {{ field.label }}
+                                        {% if field.field.required %}
+                                            <span class="text-danger">*</span>
+                                        {% endif %}
+                                    </label>
+                                    {% if field.field.widget.input_type == 'radio' %}
+                                        <div>
+                                            {{ field }}
+                                        </div>
+                                    {% else %}
                                         {{ field }}
-                                    </div>
-                                {% else %}
-                                    {{ field }}
-                                {% endif %}
-                                {% if field.help_text %}
-                                    <small class="form-text text-muted">{{ field.help_text }}</small>
-                                {% endif %}
-                                {% for error in field.errors %}
-                                    <div class="invalid-feedback d-block">{{ error }}</div>
-                                {% endfor %}
-                            </div>
+                                    {% endif %}
+                                    {% if field.help_text %}
+                                        <small class="form-text text-muted">{{ field.help_text }}</small>
+                                    {% endif %}
+                                    {% for error in field.errors %}
+                                        <div class="invalid-feedback d-block">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
                         {% endfor %}
                         
                         <div class="d-flex justify-content-between mt-4">

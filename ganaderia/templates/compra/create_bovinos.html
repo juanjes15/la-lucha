@@ -1,30 +1,70 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-
-<div class="row justify-content-center">
-    <div class="col-10 col-lg-6 mt-3 bg-body-tertiary rounded p-4">
-        <h2 class="h2">Añadir bovinos a la Compra #{{ compra.id }}</h2>
-
-        <form method="GET" class="mb-4">
-            <div class="form-group">
-                <label for="num_bovinos">¿Cuántos bovinos se compraron?:</label>
-                <input type="number" name="num_bovinos" id="num_bovinos" value="{{ num_bovinos }}" min="1"
-                    class="form-control">
+<div class="container py-4 bg-light-brown">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body">
+                    <h1 class="card-title h2 text-dark-green mb-3">Registrar Compra #{{ compra.id }}: Datos de los bovinos comprados</h1>
+                    <p class="card-text text-danger mb-4">
+                        IMPORTANTE: Ajuste el número de bovinos comprados a continuación y accione el botón de "Actualizar" para que se muestren el número de formularios acorde a la compra
+                    </p>
+                    <form method="GET" class="mb-4">
+                        <div class="form-group">
+                            <label for="num_bovinos">¿Cuántos bovinos se compraron?:</label>
+                            <input type="number" name="num_bovinos" id="num_bovinos" value="{{ num_bovinos }}" min="1"
+                                class="form-control">
+                        </div>
+                        <button type="submit" class="btn btn-secondary mt-2">Actualizar número de formularios</button>
+                    </form>
+                    
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="num_bovinos" value="{{ num_bovinos }}">
+                        {% for form in forms %}
+                            <h3 class="card-title h3 text-success">Bovino #{{ forloop.counter }}</h3>
+                            {% for field in form %}
+                                <div class="mb-3">
+                                    <label for="{{ field.id_for_label }}" class="form-label">
+                                        {{ field.label }}
+                                        {% if field.field.required %}
+                                            <span class="text-danger">*</span>
+                                        {% endif %}
+                                    </label>
+                                    {% if field.field.widget.input_type == 'radio' %}
+                                        <div>
+                                            {{ field }}
+                                        </div>
+                                    {% else %}
+                                        {{ field }}
+                                    {% endif %}
+                                    {% if field.help_text %}
+                                        <small class="form-text text-muted">{{ field.help_text }}</small>
+                                    {% endif %}
+                                    {% for error in field.errors %}
+                                        <div class="invalid-feedback d-block">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+                        
+                        <div class="d-flex justify-content-between mt-4">
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-check-lg"></i> Guardar y continuar
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <button type="submit" class="btn btn-secondary mt-2">Actualizar número de formularios</button>
-        </form>
-
-        <form method="POST">
-            {% csrf_token %}
-            <input type="hidden" name="num_bovinos" value="{{ num_bovinos }}">
-            {% for form in forms %}
-            <h3>Bovino #{{ forloop.counter }}</h3>
-            {{ form.as_p }}
-            {% endfor %}
-            <button type="submit" class="btn btn-primary">Guardar Bovinos</button>
-        </form>
+        </div>
     </div>
 </div>
+{% endblock %}
 
+{% block extra_css %}
+<style>
+    .bg-light-brown { background-color: #efebe9; }
+    .text-dark-green { color: #2e7d32; }
+</style>
 {% endblock %}

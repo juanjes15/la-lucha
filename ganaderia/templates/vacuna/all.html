@@ -1,0 +1,126 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container-fluid py-4 bg-light-brown">
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <h2 class="h3 text-dark-green">Historial de vacunas</h2>
+        </div>
+        <div class="col-md-6">
+            <form method="GET" class="d-flex justify-content-end">
+                <div class="input-group" style="max-width: 300px;">
+                    <input type="text" name="q" class="form-control" placeholder="Buscar por vendedor o fecha" value="{{ request.GET.q }}">
+                    <button class="btn btn-outline-success" type="submit">
+                        <i class="bi bi-search"></i> Buscar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% if page.object_list %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-success">
+                    <tr>
+                        <th>Vacunador</th>
+                        <th>Fecha</th>
+                        <th>Cantidad de Bovinos</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for vacuna in page.object_list %}
+                        <tr>
+                            <td>{{ vacuna.vacunador }}</td>
+                            <td>{{ vacuna.fecha|date:"d/m/Y" }}</td>
+                            <td>{{ vacuna.bovino_set.count }}</td>
+                            <td>
+                                <a href="{% url 'summary_vacuna' vacuna.id %}" class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-eye"></i> Ver detalles
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if page.paginator.num_pages > 1 %}
+            <nav aria-label="Navegación de páginas">
+                <ul class="pagination justify-content-center">
+                    {% if page.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
+                                <i class="bi bi-chevron-double-left"></i>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
+                                <i class="bi bi-chevron-left"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    {% for num in page.paginator.page_range %}
+                        {% if page.number == num %}
+                            <li class="page-item active">
+                                <span class="page-link">{{ num }}</span>
+                            </li>
+                        {% elif num > page.number|add:'-3' and num < page.number|add:'3' %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ num }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
+                                    {{ num }}
+                                </a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if page.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
+                                <i class="bi bi-chevron-right"></i>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
+                                <i class="bi bi-chevron-double-right"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    {% else %}
+        <div class="alert alert-info text-center">
+            {% if request.GET.q %}
+                No se encontraron vacunas que coincidan con tu búsqueda.
+            {% else %}
+                No hay vacunas registradas en el sistema.
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .bg-light-brown { background-color: #efebe9; }
+    .text-dark-green { color: #2e7d32; }
+    .table-responsive {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .table th {
+        background-color: #2e7d32;
+        color: white;
+    }
+    .pagination .page-link {
+        color: #2e7d32;
+    }
+    .pagination .active .page-link {
+        background-color: #2e7d32;
+        border-color: #2e7d32;
+    }
+</style>
+{% endblock %}

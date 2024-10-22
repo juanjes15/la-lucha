@@ -1,19 +1,43 @@
 {% extends 'layout.html' %}
+
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-10 col-lg-6 mt-3 bg-body-tertiary rounded p-4">
-        <h2 class="h2">Actualizar datos de bovinos para la venta</h2>
-        <form method="POST" action="{% url 'venta_bovinos_update' venta.id %}">
-            {% csrf_token %}
-            {{ formset.management_form }}
-            {% for form in formset %}
-                <div class="mb-3">
-                    <h4>Bovino {{ forloop.counter }}</h4>
-                    {{ form.as_p }}
+<div class="container py-4 bg-light-brown">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body">
+                    <h1 class="card-title h2 text-dark-green mb-3">Registrar Venta: Precio y peso de los bovinos vendidos</h1>
+
+                    <form method="POST" action="{% url 'modify_bovinos_venta' venta.id %}">
+                        {% csrf_token %}
+                        {{ formset.management_form }}
+                        {% for form in formset %}
+                        <div class="mb-3">
+                            <h4>Bovino vendido #{{ forloop.counter }} </h4>
+                            {{ form.as_p }}
+                        </div>
+                        {% endfor %}
+                        <div class="d-flex justify-content-between mt-4">
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-check-lg"></i> Guardar y continuar
+                            </button>
+                        </div>
+                    </form>
                 </div>
-            {% endfor %}
-            <button type="submit" class="btn btn-primary">Completar venta</button>
-        </form>
+            </div>
+        </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .bg-light-brown {
+        background-color: #efebe9;
+    }
+
+    .text-dark-green {
+        color: #2e7d32;
+    }
+</style>
 {% endblock %}

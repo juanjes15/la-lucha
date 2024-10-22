@@ -1,22 +1,63 @@
 {% extends 'layout.html' %}
+{% load custom_filters %}
+
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-10 col-lg-6 mt-3 bg-body-tertiary rounded p-4">
-        <h2 class="h2">Venta completada</h2>
-        <p>La venta se ha registrado exitosamente.</p>
-        <h3>Detalles de la venta:</h3>
-        <ul>
-            <li>Comprador: {{ venta.comprador }}</li>
-            <li>Fecha: {{ venta.fecha }}</li>
-            <li>Gastos adicionales: ${{ venta.gastos }}</li>
-        </ul>
-        <h3>Bovinos vendidos:</h3>
-        <ul>
-            {% for bovino in bovinos %}
-            <li>{{ bovino.nombre }} - Precio: ${{ bovino.precio_venta }}, Peso: {{ bovino.peso_venta }} kg</li>
-            {% endfor %}
-        </ul>
-        <a href="{% url 'home' %}" class="btn btn-primary">Volver al inicio</a>
+<div class="container py-4 bg-light-brown">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body">
+                    <h1 class="card-title h2 text-dark-green mb-3">Resumen Venta #{{ venta.id }}</h1>
+                    
+                    <h2 class="h4 mb-3">Detalles de la Venta</h2>
+                    <p><strong>Comprador:</strong> {{ venta.comprador }}</p>
+                    <p><strong>Fecha:</strong> {{ venta.fecha }}</p>
+                    <p><strong>Gastos adicionales:</strong> ${{ venta.gastos|format_number }}</p>
+                    {% if bovino.observaciones %}
+                        <p><strong>Observaciones:</strong> {{ venta.observaciones }}</p>
+                    {% endif %}
+                    <div class="d-flex justify-content-between mt-4">
+                        <a href="{% url 'edit_venta' venta.id %}" class="btn btn-success">
+                            <i class="bi bi-pencil"></i> Editar
+                        </a>
+                    </div>
+                    
+                    <h2 class="h4 mb-3 mt-4">Bovinos Vendidos</h2>
+                    <ul class="list-group mb-3">
+                        {% for bovino in bovinos %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <strong>{{ bovino.nombre }}</strong>
+                            Precio: ${{ bovino.precio_venta|format_number }}, Peso: {{ bovino.peso_venta }} kg
+                            <a href="{% url 'detail_bovino' bovino.id %}" class="btn btn-outline-success btn-sm">Ver detalles</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+
+                    <h2 class="h4 mb-3">Resumen Financiero</h2>
+                    <p><strong>Total precio bovinos:</strong> ${{ precio_bovinos|format_number }}</p>
+                    <p><strong>Gastos adicionales:</strong> ${{ venta.gastos|format_number }}</p>
+                    <p><strong>Total de la venta:</strong> ${{ total_venta|format_number }}</p>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'home_g' %}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left"></i> Volver al inicio
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .bg-light-brown {
+        background-color: #efebe9;
+    }
+
+    .text-dark-green {
+        color: #2e7d32;
+    }
+</style>
 {% endblock %}

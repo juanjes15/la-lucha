@@ -84,49 +84,20 @@
         </div>
     </section>
 
-    <!-- Sección 4: Historial de compras, ventas y vacunas -->
+    <!-- Sección 4: Registros de compras, ventas y vacunas -->
     <section>
-        <h2 class="h3 text-dark-green mb-4">Historial de Actividades</h2>
+        <h2 class="h3 text-dark-green mb-4">Historial de compras, ventas, vacunas y bovinos</h2>
         <div class="row g-4">
-            <div class="col-md-4">
-                <div class="card border-0 shadow-sm h-100">
-                    <div class="card-body">
-                        <h3 class="h5 text-dark-green mb-3">Últimas Compras</h3>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">Compra #12345 - 05/04/2024</li>
-                            <li class="list-group-item">Compra #12344 - 01/04/2024</li>
-                            <li class="list-group-item">Compra #12343 - 28/03/2024</li>
-                        </ul>
-                        <a href="#" class="btn btn-outline-success btn-sm mt-3">Ver todas las compras</a>
+            {% for log in logs %}
+            <div class="col-md-3 col-sm-6">
+                <a href="{{ log.url }}" class="card h-100 border-0 shadow-sm text-decoration-none">
+                    <div class="card-body text-center">
+                        <img src="{{ log.img }}" alt="{{ log.name }}" width="150" class="mb-3">
+                        <h3 class="h5 text-dark-green">{{ log.name }}</h3>
                     </div>
-                </div>
+                </a>
             </div>
-            <div class="col-md-4">
-                <div class="card border-0 shadow-sm h-100">
-                    <div class="card-body">
-                        <h3 class="h5 text-dark-green mb-3">Últimas Ventas</h3>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">Venta #56789 - 04/04/2024</li>
-                            <li class="list-group-item">Venta #56788 - 30/03/2024</li>
-                            <li class="list-group-item">Venta #56787 - 25/03/2024</li>
-                        </ul>
-                        <a href="#" class="btn btn-outline-success btn-sm mt-3">Ver todas las ventas</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card border-0 shadow-sm h-100">
-                    <div class="card-body">
-                        <h3 class="h5 text-dark-green mb-3">Últimas Vacunas</h3>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">Vacuna #98765 - 06/04/2024</li>
-                            <li class="list-group-item">Vacuna #98764 - 03/04/2024</li>
-                            <li class="list-group-item">Vacuna #98763 - 01/04/2024</li>
-                        </ul>
-                        <a href="#" class="btn btn-outline-success btn-sm mt-3">Ver todas las vacunas</a>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </section>
 </div>

@@ -11,6 +11,7 @@ from django.forms import (
     IntegerField,
     SelectMultiple,
     ValidationError,
+    CheckboxSelectMultiple,
     ModelMultipleChoiceField,
 )
 from .models import Compra, Venta, Vacuna, Bovino, VacunaBovino
@@ -112,9 +113,17 @@ class VentaForm(ModelForm):
 class SelectBovinosVentaForm(Form):
     bovinos = ModelMultipleChoiceField(
         queryset=Bovino.objects.filter(venta__isnull=True),
-        widget=SelectMultiple(attrs={"class": "form-select"}),
-        label="Seleccionar bovinos para vender",
+        widget=CheckboxSelectMultiple,
+        label="Seleccione a continuación los bovinos vendidos",
     )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['bovinos'].label_from_instance = self.label_from_instance
+
+    @staticmethod
+    def label_from_instance(obj):
+        return f"{obj.nombre} - {obj.etapa_y_edad()}"
 
 
 class ModifyBovinosVentaForm(ModelForm):

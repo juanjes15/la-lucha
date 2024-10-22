@@ -59,8 +59,32 @@ def home_g(request):
         },
     ]
 
+    # Historiales
+    logs = [
+        {
+            "name": "Compras",
+            "url": reverse("all_compras"),
+            "img": "https://i.imgur.com/8At2a8G.jpeg",
+        },
+        {
+            "name": "Ventas",
+            "url": reverse("all_ventas"),
+            "img": "https://i.imgur.com/M9RvBpQ.jpeg",
+        },
+        {
+            "name": "Vacunas",
+            "url": reverse("all_vacunas"),
+            "img": "https://i.imgur.com/t1yJeSc.jpeg",
+        },
+        {
+            "name": "Bovinos vendidos",
+            "url": reverse("all_bovinos"),
+            "img": "https://i.imgur.com/zeOYtE3.jpeg",
+        },
+    ]
+
     # Datos enviados al template
-    context = {"page": page, "inputs": inputs}
+    context = {"page": page, "inputs": inputs, "logs": logs}
 
     return render(request=request, template_name="home_g.html", context=context)
 
@@ -105,6 +129,25 @@ def edit_bovino(request, bovino_id):
     )
 
 
+@login_required
+def all_bovinos(request):
+    # Página para mostrar los bovinos vendidos
+    search = request.GET.get("q")
+    page_num = request.GET.get("page", 1)
+    bovinos = Bovino.objects.filter(venta__isnull=False)
+    if search:
+        bovinos = bovinos.filter(
+            Q(nombre__icontains=search)
+            | Q(fecha_nacimiento__icontains=search)
+            | Q(madre__icontains=search)
+        )
+    page = Paginator(object_list=bovinos, per_page=5).get_page(page_num)
+
+    context = {"page": page}
+
+    return render(request=request, template_name="all_bovinos.html", context=context)
+
+
 # COMPRA
 @login_required
 def create_compra(request):
@@ -121,7 +164,7 @@ def create_compra(request):
 
 @login_required
 def edit_compra(request, compra_id):
-    # Vista para editar un bovino
+    # Vista para editar una compra
     compra = get_object_or_404(Compra, id=compra_id)
     if request.method == "POST":
         form = CompraForm(request.POST, instance=compra)
@@ -186,6 +229,24 @@ def summary_compra(request, compra_id):
     )
 
 
+@login_required
+def all_compras(request):
+    # Página para mostrar todas las compras
+    search = request.GET.get("q")
+    page_num = request.GET.get("page", 1)
+    compras = Compra.objects.all()
+    if search:
+        compras = compras.filter(
+            Q(vendedor__icontains=search)
+            | Q(fecha__icontains=search)
+        )
+    page = Paginator(object_list=compras, per_page=5).get_page(page_num)
+
+    context = {"page": page}
+
+    return render(request=request, template_name="compra/all.html", context=context)
+
+
 # VENTA
 @login_required
 def create_venta(request):
@@ -198,6 +259,24 @@ def create_venta(request):
     else:
         form = VentaForm()
     return render(request, "venta/create.html", {"form": form})
+
+
+@login_required
+def edit_venta(request, venta_id):
+    # Vista para editar una venta
+    venta = get_object_or_404(Venta, id=venta_id)
+    if request.method == "POST":
+        form = VentaForm(request.POST, instance=venta)
+        if form.is_valid():
+            venta.save()
+            return redirect("summary_venta", venta_id=venta_id)
+    else:
+        form = VentaForm(instance=venta)
+    return render(
+        request,
+        "venta/edit.html",
+        {"form": form, "venta_id": venta_id},
+    )
 
 
 @login_required
@@ -251,9 +330,31 @@ def summary_venta(request, venta_id):
     # Vista para ver el resumen de la venta
     venta = get_object_or_404(Venta, id=venta_id)
     bovinos_vendidos = Bovino.objects.filter(venta=venta)
-    return render(
-        request, "venta/summary.html", {"venta": venta, "bovinos": bovinos_vendidos}
+    precio_bovinos = (
+        bovinos_vendidos.aggregate(Sum("precio_venta"))["precio_venta__sum"] or 0
     )
+    total_venta = precio_bovinos + venta.gastos
+    return render(
+        request, "venta/summary.html", {"venta": venta, "bovinos": bovinos_vendidos, "precio_bovinos": precio_bovinos, "total_venta": total_venta}
+    )
+
+
+@login_required
+def all_ventas(request):
+    # Página para mostrar todas las ventas
+    search = request.GET.get("q")
+    page_num = request.GET.get("page", 1)
+    ventas = Venta.objects.all()
+    if search:
+        ventas = ventas.filter(
+            Q(comprador__icontains=search)
+            | Q(fecha__icontains=search)
+        )
+    page = Paginator(object_list=ventas, per_page=5).get_page(page_num)
+
+    context = {"page": page}
+
+    return render(request=request, template_name="venta/all.html", context=context)
 
 
 # VACUNA
@@ -348,3 +449,21 @@ def summary_vacuna(request, vacuna_id):
         "vacuna/summary.html",
         {"vacuna": vacuna, "bovinos_vacunados": bovinos_vacunados},
     )
+
+
+@login_required
+def all_vacunas(request):
+    # Página para mostrar todas las vacunas
+    search = request.GET.get("q")
+    page_num = request.GET.get("page", 1)
+    vacunas = Vacuna.objects.all()
+    if search:
+        vacunas = vacunas.filter(
+            Q(vacunador__icontains=search)
+            | Q(fecha__icontains=search)
+        )
+    page = Paginator(object_list=vacunas, per_page=5).get_page(page_num)
+
+    context = {"page": page}
+
+    return render(request=request, template_name="vacuna/all.html", context=context)

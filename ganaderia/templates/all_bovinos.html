@@ -1,0 +1,63 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container-fluid py-4 bg-light-brown">
+    <h2 class="h3 text-dark-green mb-4">Historial de bovinos vendidos</h2>
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            <form action="{% url 'home_g' %}" class="mb-4">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="q" value="{{ request.GET.q }}"
+                        placeholder="Buscar por nombre, fecha de nacimiento o madre">
+                    <button class="btn btn-outline-success" type="submit">Buscar</button>
+                </div>
+            </form>
+
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                {% for bovino in page.object_list %}
+                    <div class="col">
+                        <div class="card h-100 border-0 shadow-sm {% if bovino.sexo %}bg-primary-subtle{% else %}bg-light-pink{% endif %}">
+                            <div class="card-body">
+                                <h4 class="h5 card-title text-dark-green">{{ bovino.nombre }}</h4>
+                                <h5 class="h6 card-subtitle mb-2 text-muted">{{ bovino.etapa_y_edad }}</h5>
+                                <p class="card-text">
+                                    {% if bovino.compra is None %}
+                                        <span class="badge bg-success">Nacimiento</span>
+                                    {% else %}
+                                        <span class="badge bg-warning text-dark">Compra</span>
+                                    {% endif %}
+                                </p>
+                                <a href="{% url 'detail_bovino' bovino.id %}" class="btn btn-outline-success btn-sm">Ver detalles</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <nav class="mt-4" aria-label="Navegación de páginas">
+                <ul class="pagination justify-content-center">
+                    {% if page.has_previous %}
+                        <li class="page-item"><a class="page-link" href="?q={{ request.GET.q }}&page=1">&laquo; Primera</a></li>
+                        <li class="page-item"><a class="page-link" href="?q={{ request.GET.q }}&page={{ page.previous_page_number }}">Anterior</a></li>
+                    {% endif %}
+
+                    <li class="page-item active"><span class="page-link">{{ page.number }} de {{ page.paginator.num_pages }}</span></li>
+
+                    {% if page.has_next %}
+                        <li class="page-item"><a class="page-link" href="?q={{ request.GET.q }}&page={{ page.next_page_number }}">Siguiente</a></li>
+                        <li class="page-item"><a class="page-link" href="?q={{ request.GET.q }}&page={{ page.paginator.num_pages }}">Última &raquo;</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .bg-light-brown { background-color: #efebe9; }
+    .bg-light-pink { background-color: #ffe4e1; }
+    .text-dark-green { color: #2e7d32; }
+</style>
+{% endblock %}

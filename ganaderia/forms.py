@@ -9,7 +9,6 @@ from django.forms import (
     NumberInput,
     RadioSelect,
     IntegerField,
-    SelectMultiple,
     ValidationError,
     CheckboxSelectMultiple,
     ModelMultipleChoiceField,
@@ -110,11 +109,11 @@ class VentaForm(ModelForm):
         }
 
 
-class SelectBovinosVentaForm(Form):
+class SelectBovinosForm(Form):
     bovinos = ModelMultipleChoiceField(
         queryset=Bovino.objects.filter(venta__isnull=True),
         widget=CheckboxSelectMultiple,
-        label="Seleccione a continuación los bovinos vendidos",
+        label="Seleccione a continuación los bovinos",
     )
 
     def __init__(self, *args, **kwargs):
@@ -163,14 +162,6 @@ class VacunaForm(ModelForm):
                 attrs={"class": "form-control", "style": "height: 100px"}
             ),
         }
-
-
-class SelectBovinosVacunaForm(Form):
-    bovinos = ModelMultipleChoiceField(
-        queryset=Bovino.objects.filter(venta__isnull=True),
-        widget=SelectMultiple(attrs={"class": "form-select"}),
-        label="Seleccionar bovinos para vacunar",
-    )
 
 
 class VacunaBovinoForm(ModelForm):

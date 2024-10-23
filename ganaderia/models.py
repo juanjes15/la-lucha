@@ -40,12 +40,12 @@ class Venta(Model):
 
 
 class Vacuna(Model):
-    vacunador = CharField(max_length=150)
-    cc_vacunador = PositiveBigIntegerField()
-    tel_vacunador = PositiveBigIntegerField()
-    fecha = DateField()
-    precio = PositiveIntegerField()
-    observaciones = TextField(blank=True)
+    vacunador = CharField(verbose_name="Nombre del vacunador", max_length=150)
+    cc_vacunador = PositiveBigIntegerField(verbose_name="Cédula del vacunador")
+    tel_vacunador = PositiveBigIntegerField(verbose_name="Teléfono del vacunador")
+    fecha = DateField(verbose_name="Fecha de la vacunación")
+    precio = PositiveIntegerField(verbose_name="Pago total de la vacunación")
+    observaciones = TextField(verbose_name="Observaciones (opcional)", blank=True)
 
     def __str__(self):
         return self.fecha
@@ -123,7 +123,7 @@ class Bovino(Model):
 class VacunaBovino(Model):
     vacuna = ForeignKey(Vacuna, on_delete=CASCADE)
     bovino = ForeignKey(Bovino, on_delete=CASCADE)
-    tipo = CharField(max_length=25)
+    tipo = CharField(verbose_name="Tipo de vacuna", max_length=25)
 
     def __str__(self):
         return "{}_{}".format(self.bovino.__str__(), self.vacuna.__str__())

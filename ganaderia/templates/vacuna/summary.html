@@ -1,22 +1,54 @@
 {% extends 'layout.html' %}
+{% load custom_filters %}
+
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-10 col-lg-6 mt-3 bg-body-tertiary rounded p-4">
-        <h2 class="h2">Vacunación completada</h2>
-        <p>La vacunación se ha registrado exitosamente.</p>
-        <h3>Detalles de la vacuna:</h3>
-        <ul>
-            <li>Vacunador: {{ vacuna.vacunador }}</li>
-            <li>Fecha: {{ vacuna.fecha }}</li>
-            <li>Precio: ${{ vacuna.precio }}</li>
-        </ul>
-        <h3>Bovinos vacunados:</h3>
-        <ul>
-        {% for vacuna_bovino in bovinos_vacunados %}
-            <li>{{ vacuna_bovino.bovino.nombre }} - Tipo: {{ vacuna_bovino.tipo }}</li>
-        {% endfor %}
-        </ul>
-        <a href="{% url 'home_g' %}" class="btn btn-primary">Volver al inicio</a>
+<div class="container py-4 bg-light-brown">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body">
+                    <h1 class="card-title h2 text-dark-green mb-3">Resumen Vacuna #{{ vacuna.id }}</h1>
+                    
+                    <h2 class="h4 mb-3">Detalles de la Vacuna</h2>
+                    <p><strong>Vacunador:</strong> {{ vacuna.vacunador }}</p>
+                    <p><strong>Cédula vacunador:</strong> {{ vacuna.cc_vacunador|format_number }}</p>
+                    <p><strong>Teléfono vacunador:</strong> {{ vacuna.tel_vacunador }}</p>
+                    <p><strong>Fecha:</strong> {{ vacuna.fecha }}</p>
+                    <p><strong>Valor total:</strong> ${{ vacuna.precio|format_number }}</p>
+                    {% if vacuna.observaciones %}
+                        <p><strong>Observaciones:</strong> {{ vacuna.observaciones }}</p>
+                    {% endif %}
+                    <div class="d-flex justify-content-between mt-4">
+                        <a href="{% url 'edit_vacuna' vacuna.id %}" class="btn btn-success">
+                            <i class="bi bi-pencil"></i> Editar
+                        </a>
+                    </div>
+                    
+                    <h2 class="h4 mb-3 mt-4">Bovinos Vacunados</h2>
+                    <ul class="list-group mb-3">
+                        {% for vacuna_bovino in bovinos_vacunados %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <strong>{{ vacuna_bovino.bovino.nombre }}</strong> Tipo: {{ vacuna_bovino.tipo }}
+                                <a href="{% url 'detail_bovino' vacuna_bovino.bovino.id %}" class="btn btn-outline-success btn-sm">Ver detalles</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'home_g' %}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left"></i> Volver al inicio
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .bg-light-brown { background-color: #efebe9; }
+    .text-dark-green { color: #2e7d32; }
+</style>
 {% endblock %}

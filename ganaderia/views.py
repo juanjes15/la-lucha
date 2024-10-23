@@ -6,9 +6,8 @@ from .forms import (
     CompraForm,
     VacunaForm,
     VacunaBovinoForm,
-    SelectBovinosVentaForm,
+    SelectBovinosForm,
     ModifyBovinosVentaForm,
-    SelectBovinosVacunaForm,
     CreateBovinosCompraForm,
 )
 from .models import Compra, Bovino, Venta, Vacuna, VacunaBovino
@@ -285,7 +284,7 @@ def select_bovinos_venta(request, venta_id):
     venta = get_object_or_404(Venta, id=venta_id)
 
     if request.method == "POST":
-        form = SelectBovinosVentaForm(request.POST)
+        form = SelectBovinosForm(request.POST)
         if form.is_valid():
             selected_bovinos = form.cleaned_data["bovinos"]
             ModifyBovinosVentaFormSet = modelformset_factory(
@@ -298,7 +297,7 @@ def select_bovinos_venta(request, venta_id):
                 {"formset": formset, "venta": venta},
             )
     else:
-        form = SelectBovinosVentaForm()
+        form = SelectBovinosForm()
 
     return render(request, "venta/select_bovinos.html", {"form": form, "venta": venta})
 
@@ -371,12 +370,30 @@ def create_vacuna(request):
 
 
 @login_required
+def edit_vacuna(request, vacuna_id):
+    # Vista para editar una vacuna
+    vacuna = get_object_or_404(Vacuna, id=vacuna_id)
+    if request.method == "POST":
+        form = VacunaForm(request.POST, instance=vacuna)
+        if form.is_valid():
+            vacuna.save()
+            return redirect("summary_vacuna", vacuna_id=vacuna_id)
+    else:
+        form = VacunaForm(instance=vacuna)
+    return render(
+        request,
+        "vacuna/edit.html",
+        {"form": form, "vacuna_id": vacuna_id},
+    )
+
+
+@login_required
 def select_bovinos_vacuna(request, vacuna_id):
     # Vista para seleccionar los bovinos a vacunar
     vacuna = get_object_or_404(Vacuna, id=vacuna_id)
 
     if request.method == "POST":
-        form = SelectBovinosVacunaForm(request.POST)
+        form = SelectBovinosForm(request.POST)
         if form.is_valid():
             selected_bovinos = form.cleaned_data["bovinos"]
             VacunaBovinoFormSet = formset_factory(VacunaBovinoForm, extra=0)
@@ -395,7 +412,7 @@ def select_bovinos_vacuna(request, vacuna_id):
                 {"formset": formset, "vacuna": vacuna},
             )
     else:
-        form = SelectBovinosVacunaForm()
+        form = SelectBovinosForm()
 
     return render(
         request, "vacuna/select_bovinos.html", {"form": form, "vacuna": vacuna}

@@ -22,6 +22,7 @@ urlpatterns = [
     path("venta/all/", views.all_ventas, name="all_ventas"),
     # Vacuna
     path("vacuna/create/", views.create_vacuna, name="create_vacuna"),
+    path("vacuna/<int:vacuna_id>/edit/", views.edit_vacuna, name="edit_vacuna"),
     path("vacuna/<int:vacuna_id>/select/", views.select_bovinos_vacuna, name="select_bovinos_vacuna"),
     path("vacuna/<int:vacuna_id>/bovinos/", views.create_vacunabovino, name="create_vacunabovino"),
     path("vacuna/<int:vacuna_id>/summary/", views.summary_vacuna, name="summary_vacuna"),

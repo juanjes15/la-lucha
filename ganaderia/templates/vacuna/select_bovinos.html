@@ -1,13 +1,61 @@
 {% extends 'layout.html' %}
+
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-10 col-lg-6 mt-3 bg-body-tertiary rounded p-4">
-        <h2 class="h2">Seleccionar bovinos vacunados</h2>
-        <form method="POST">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn btn-primary">Continuar</button>
-        </form>
+<div class="container py-4 bg-light-brown">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body">
+                    <h1 class="card-title h2 text-dark-green mb-3">Registrar Vacuna: Seleccionar bovinos vacunados</h1>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            {{ form.bovinos.label_tag }}
+                            <div class="checkbox-list mt-3">
+                                {% for checkbox in form.bovinos %}
+                                    <div class="form-check">
+                                        {{ checkbox.tag }}
+                                        <label class="form-check-label" for="{{ checkbox.id_for_label }}">
+                                            {{ checkbox.choice_label }}
+                                        </label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between mt-4">
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-check-lg"></i> Guardar y continuar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .bg-light-brown { background-color: #efebe9; }
+    .text-dark-green { color: #2e7d32; }
+    .checkbox-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        max-height: 400px;
+        overflow-y: auto;
+        padding-right: 15px;
+    }
+    .form-check {
+        margin-bottom: 5px;
+    }
+    .form-check-label {
+        display: inline-block;
+        vertical-align: top;
+        margin-left: 5px;
+        max-width: calc(100% - 25px);
+        word-wrap: break-word;
+    }
+</style>
 {% endblock %}

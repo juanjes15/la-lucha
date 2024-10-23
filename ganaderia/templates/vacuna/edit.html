@@ -6,16 +6,11 @@
         <div class="col-md-8">
             <div class="card border-0 shadow-lg">
                 <div class="card-body">
-                    <h1 class="card-title h2 text-dark-green mb-3">Registrar Vacuna: Datos generales</h1>
-                    <div class="card-text text-muted mb-4">
-                        <p>Para registrar su vacuna requiere llenar tres formularios:</p>
-                        <ol class="list-group list-group-numbered mb-3">
-                            <li class="list-group-item">Datos generales (está aquí)</li>
-                            <li class="list-group-item">Selección de los bovinos vacunados</li>
-                            <li class="list-group-item">Tipo de vacuna que se aplico a cada bovino</li>
-                        </ol>
-                        <p>Por último se mostrará el resumen de la vacuna. Antes de empezar prepare todos los datos y recuerde hacer todo el procedimiento de una sola vez</p>
-                    </div>
+                    <h1 class="card-title h2 text-dark-green mb-3">Editar Vacuna</h1>
+                    <p class="card-text text-muted mb-4">
+                        Actualice la información de la vacuna en el formulario a continuación. 
+                        Asegúrese de completar todos los campos requeridos.
+                    </p>
                     
                     <form method="POST">
                         {% csrf_token %}
@@ -44,11 +39,11 @@
                         {% endfor %}
                         
                         <div class="d-flex justify-content-between mt-4">
-                            <a href="{% url 'home_g' %}" class="btn btn-outline-secondary">
+                            <a href="{% url 'summary_vacuna' vacuna_id %}" class="btn btn-outline-secondary">
                                 <i class="bi bi-arrow-left"></i> Volver
                             </a>
                             <button type="submit" class="btn btn-success">
-                                <i class="bi bi-check-lg"></i> Guardar y continuar
+                                <i class="bi bi-check-lg"></i> Guardar cambios
                             </button>
                         </div>
                     </form>

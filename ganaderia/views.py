@@ -62,23 +62,23 @@ def home_g(request):
     # Historiales
     logs = [
         {
+            "name": "Bovinos vendidos",
+            "url": reverse("all_bovinos"),
+            "img": "https://i.imgur.com/8At2a8G.jpeg",
+        },
+        {
             "name": "Compras",
             "url": reverse("all_compras"),
-            "img": "https://i.imgur.com/8At2a8G.jpeg",
+            "img": "https://i.imgur.com/M9RvBpQ.jpeg",
         },
         {
             "name": "Ventas",
             "url": reverse("all_ventas"),
-            "img": "https://i.imgur.com/M9RvBpQ.jpeg",
+            "img": "https://i.imgur.com/t1yJeSc.jpeg",
         },
         {
             "name": "Vacunas",
             "url": reverse("all_vacunas"),
-            "img": "https://i.imgur.com/t1yJeSc.jpeg",
-        },
-        {
-            "name": "Bovinos vendidos",
-            "url": reverse("all_bovinos"),
             "img": "https://i.imgur.com/zeOYtE3.jpeg",
         },
     ]

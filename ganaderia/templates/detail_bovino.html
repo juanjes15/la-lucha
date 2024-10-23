@@ -23,10 +23,10 @@
                         <div class="col-md-6">
                             <h3 class="h5 text-dark-green">Detalles Adicionales</h3>
                             <ul class="list-group list-group-flush">
-                                {% if not bovino.compra is None %}
+                                {% if bovino.compra %}
                                     <li class="list-group-item bg-transparent"><strong>Metodo de adquisición:</strong> <span class="badge bg-warning text-dark">Compra</span> <a href="{% url 'summary_compra' bovino.compra.id %}" class="btn btn-outline-success btn-sm">Ver detalles</a></li>
                                     <li class="list-group-item bg-transparent"><strong>Precio de compra:</strong> ${{ bovino.precio_compra|format_number }}</li>
-                                    <li class="list-group-item bg-transparent"><strong>Peso de compra:</strong> {{ bovino.peso_compra }}</li>
+                                    <li class="list-group-item bg-transparent"><strong>Peso al comprar:</strong> {{ bovino.peso_compra }}</li>
                                 {% else %}
                                     <li class="list-group-item bg-transparent"><strong>Metodo de adquisición:</strong> <span class="badge bg-success">Nacimiento</span></li>
                                 {% endif %}
@@ -53,10 +53,36 @@
                     </div>
                     
                     {% if bovino.observaciones %}
-                    <div class="mb-4">
-                        <h3 class="h5 text-dark-green">Observaciones</h3>
-                        <p class="card-text">{{ bovino.observaciones }}</p>
-                    </div>
+                        <div class="mb-4">
+                            <h3 class="h5 text-dark-green">Observaciones</h3>
+                            <p class="card-text">{{ bovino.observaciones }}</p>
+                        </div>
+                    {% endif %}
+
+                    {% if bovino.venta %}
+                        <div class="mb-4">
+                            <h2 class="h2 text-danger">VENDIDO <a href="{% url 'summary_venta' bovino.venta.id %}" class="btn btn-outline-warning btn-sm">Ver detalles</a></h3>
+                            <p><strong>Precio de venta:</strong> ${{ bovino.precio_venta|format_number }}</li></p>
+                            <p><strong>Peso al vender:</strong> {{ bovino.peso_venta|format_number }} kg</li></p>
+                        </div>
+                    {% endif %}
+
+                    {% if bovino.vacunas.all|length > 0 %}
+                        <div class="mb-4">
+                            <h3 class="h5 text-dark-green">Vacunas</h3>
+                            {% for vacuna_bovino in bovino.vacunabovino_set.all %}
+                                <div class="card mb-2">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ vacuna_bovino.tipo }}</h5>
+                                        <p class="card-text">
+                                            <strong>Fecha:</strong> {{ vacuna_bovino.vacuna.fecha }}<br>
+                                            <strong>Vacunador:</strong> {{ vacuna_bovino.vacuna.vacunador }}<br>
+                                            <a href="{% url 'summary_vacuna' vacuna_bovino.id %}" class="btn btn-outline-success btn-sm">Ver detalles</a>
+                                        </p>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
                     {% endif %}
                     
                     <div class="d-flex justify-content-between">

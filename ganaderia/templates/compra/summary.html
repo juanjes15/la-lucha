@@ -13,7 +13,7 @@
                     <p><strong>Vendedor:</strong> {{ compra.vendedor }}</p>
                     <p><strong>Fecha:</strong> {{ compra.fecha }}</p>
                     <p><strong>Gastos adicionales:</strong> ${{ compra.gastos|format_number }}</p>
-                    {% if bovino.observaciones %}
+                    {% if compra.observaciones %}
                         <p><strong>Observaciones:</strong> {{ compra.observaciones }}</p>
                     {% endif %}
                     <div class="d-flex justify-content-between mt-4">
@@ -27,7 +27,7 @@
                         {% for bovino in bovinos %}
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <strong>{{ bovino.nombre }}</strong>
-                            Precio: ${{ bovino.precio_compra|format_number }}, Peso: {{ bovino.peso_compra }} kg
+                            Precio: ${{ bovino.precio_compra|format_number }}{% if bovino.peso_compra %}, Peso: {{ bovino.peso_compra }} kg{% endif %}
                             <a href="{% url 'detail_bovino' bovino.id %}" class="btn btn-outline-success btn-sm">Ver detalles</a>
                         </li>
                         {% endfor %}

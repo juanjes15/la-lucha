@@ -16,8 +16,12 @@
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item bg-transparent"><strong>Fecha de nacimiento:</strong> {{ bovino.fecha_nacimiento }}</li>
                                 <li class="list-group-item bg-transparent"><strong>Sexo:</strong> {% if bovino.sexo %}Macho{% else %}Hembra{% endif %}</li>
-                                <li class="list-group-item bg-transparent"><strong>Madre:</strong> {% if bovino.madre == "" %}No registra{% else %}{{ bovino.madre }}{% endif %}</li>
-                                <li class="list-group-item bg-transparent"><strong>Padre:</strong> {% if bovino.padre == "" %}No registra{% else %}{{ bovino.padre }}{% endif %}</li>
+                                {% if bovino.madre %}
+                                    <li class="list-group-item bg-transparent"><strong>Madre:</strong> {{ bovino.madre }}</li>
+                                {% endif %}
+                                {% if bovino.padre %}
+                                    <li class="list-group-item bg-transparent"><strong>Padre:</strong> {{ bovino.padre }}</li>
+                                {% endif %}
                             </ul>
                         </div>
                         <div class="col-md-6">
@@ -26,7 +30,9 @@
                                 {% if bovino.compra %}
                                     <li class="list-group-item bg-transparent"><strong>Metodo de adquisición:</strong> <span class="badge bg-warning text-dark">Compra</span> <a href="{% url 'summary_compra' bovino.compra.id %}" class="btn btn-outline-success btn-sm">Ver detalles</a></li>
                                     <li class="list-group-item bg-transparent"><strong>Precio de compra:</strong> ${{ bovino.precio_compra|format_number }}</li>
-                                    <li class="list-group-item bg-transparent"><strong>Peso al comprar:</strong> {{ bovino.peso_compra }}</li>
+                                    {% if bovino.peso_compra %}
+                                        <li class="list-group-item bg-transparent"><strong>Peso al comprar:</strong> {{ bovino.peso_compra }}</li>
+                                    {% endif %}
                                 {% else %}
                                     <li class="list-group-item bg-transparent"><strong>Metodo de adquisición:</strong> <span class="badge bg-success">Nacimiento</span></li>
                                 {% endif %}
@@ -62,8 +68,12 @@
                     {% if bovino.venta %}
                         <div class="mb-4">
                             <h2 class="h2 text-danger">VENDIDO <a href="{% url 'summary_venta' bovino.venta.id %}" class="btn btn-outline-warning btn-sm">Ver detalles</a></h3>
-                            <p><strong>Precio de venta:</strong> ${{ bovino.precio_venta|format_number }}</li></p>
-                            <p><strong>Peso al vender:</strong> {{ bovino.peso_venta|format_number }} kg</li></p>
+                            <p><strong>Comprador:</strong> {{ bovino.venta.comprador }}</p>
+                            <p><strong>Fecha:</strong> {{ bovino.venta.fecha }}</p>
+                            <p><strong>Precio de venta:</strong> ${{ bovino.precio_venta|format_number }}</p>
+                            {% if bovino.peso_venta %}
+                                <p><strong>Peso al vender:</strong> {{ bovino.peso_venta|format_number }} kg</p>
+                            {% endif %}
                         </div>
                     {% endif %}
 

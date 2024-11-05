@@ -13,7 +13,7 @@
                     <p><strong>Comprador:</strong> {{ venta.comprador }}</p>
                     <p><strong>Fecha:</strong> {{ venta.fecha }}</p>
                     <p><strong>Gastos adicionales:</strong> ${{ venta.gastos|format_number }}</p>
-                    {% if bovino.observaciones %}
+                    {% if venta.observaciones %}
                         <p><strong>Observaciones:</strong> {{ venta.observaciones }}</p>
                     {% endif %}
                     <div class="d-flex justify-content-between mt-4">
@@ -27,7 +27,7 @@
                         {% for bovino in bovinos %}
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 <strong>{{ bovino.nombre }}</strong>
-                                Precio: ${{ bovino.precio_venta|format_number }}, Peso: {{ bovino.peso_venta }} kg
+                                Precio: ${{ bovino.precio_venta|format_number }}{% if bovino.peso_venta %}, Peso: {{ bovino.peso_venta }} kg{% endif %}
                                 <a href="{% url 'detail_bovino' bovino.id %}" class="btn btn-outline-success btn-sm">Ver detalles</a>
                             </li>
                         {% endfor %}
@@ -36,7 +36,7 @@
                     <h2 class="h4 mb-3">Resumen Financiero</h2>
                     <p><strong>Total precio bovinos:</strong> ${{ precio_bovinos|format_number }}</p>
                     <p><strong>Gastos adicionales:</strong> ${{ venta.gastos|format_number }}</p>
-                    <p><strong>Total de la venta:</strong> ${{ total_venta|format_number }}</p>
+                    <p><strong>Ganancia final de la venta:</strong> ${{ ganancia_venta|format_number }}</p>
 
                     <div class="d-flex justify-content-between">
                         <a href="{% url 'home_g' %}" class="btn btn-outline-secondary">

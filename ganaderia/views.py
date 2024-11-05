@@ -32,7 +32,7 @@ def home_g(request):
             | Q(fecha_nacimiento__icontains=search)
             | Q(madre__icontains=search)
         )
-    page = Paginator(object_list=bovinos, per_page=5).get_page(page_num)
+    page = Paginator(object_list=bovinos, per_page=9).get_page(page_num)
 
     # Entrada de datos
     inputs = [
@@ -140,7 +140,7 @@ def all_bovinos(request):
             | Q(fecha_nacimiento__icontains=search)
             | Q(madre__icontains=search)
         )
-    page = Paginator(object_list=bovinos, per_page=5).get_page(page_num)
+    page = Paginator(object_list=bovinos, per_page=9).get_page(page_num)
 
     context = {"page": page}
 
@@ -239,7 +239,7 @@ def all_compras(request):
             Q(vendedor__icontains=search)
             | Q(fecha__icontains=search)
         )
-    page = Paginator(object_list=compras, per_page=5).get_page(page_num)
+    page = Paginator(object_list=compras, per_page=9).get_page(page_num)
 
     context = {"page": page}
 
@@ -332,9 +332,9 @@ def summary_venta(request, venta_id):
     precio_bovinos = (
         bovinos_vendidos.aggregate(Sum("precio_venta"))["precio_venta__sum"] or 0
     )
-    total_venta = precio_bovinos + venta.gastos
+    ganancia_venta = precio_bovinos - venta.gastos
     return render(
-        request, "venta/summary.html", {"venta": venta, "bovinos": bovinos_vendidos, "precio_bovinos": precio_bovinos, "total_venta": total_venta}
+        request, "venta/summary.html", {"venta": venta, "bovinos": bovinos_vendidos, "precio_bovinos": precio_bovinos, "ganancia_venta": ganancia_venta}
     )
 
 
@@ -349,7 +349,7 @@ def all_ventas(request):
             Q(comprador__icontains=search)
             | Q(fecha__icontains=search)
         )
-    page = Paginator(object_list=ventas, per_page=5).get_page(page_num)
+    page = Paginator(object_list=ventas, per_page=9).get_page(page_num)
 
     context = {"page": page}
 
@@ -479,7 +479,7 @@ def all_vacunas(request):
             Q(vacunador__icontains=search)
             | Q(fecha__icontains=search)
         )
-    page = Paginator(object_list=vacunas, per_page=5).get_page(page_num)
+    page = Paginator(object_list=vacunas, per_page=9).get_page(page_num)
 
     context = {"page": page}
 

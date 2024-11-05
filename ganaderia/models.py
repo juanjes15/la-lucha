@@ -22,21 +22,27 @@ from django.db.models import (
 class Compra(Model):
     vendedor = CharField(verbose_name="Nombre del vendedor", max_length=150)
     fecha = DateField(verbose_name="Fecha de la compra")
-    gastos = PositiveIntegerField(verbose_name="Gastos adicionales (Flete, pesada, etc)")
+    gastos = PositiveIntegerField(verbose_name="Total gastos adicionales (Flete, pesada, etc)")
     observaciones = TextField(verbose_name="Observaciones (opcional)", blank=True)
 
     def __str__(self):
         return f"{self.vendedor} {self.fecha}"
+    
+    class Meta:
+        ordering = ["fecha"]
 
 
 class Venta(Model):
     comprador = CharField(verbose_name="Nombre del comprador", max_length=150)
     fecha = DateField(verbose_name="Fecha de la venta")
-    gastos = PositiveIntegerField(verbose_name="Gastos adicionales (Flete, pesada, etc)")
+    gastos = PositiveIntegerField(verbose_name="Total gastos adicionales (Flete, pesada, etc)")
     observaciones = TextField(verbose_name="Observaciones (opcional)", blank=True)
 
     def __str__(self):
         return f"{self.comprador} {self.fecha}"
+    
+    class Meta:
+        ordering = ["fecha"]
 
 
 class Vacuna(Model):
@@ -49,6 +55,9 @@ class Vacuna(Model):
 
     def __str__(self):
         return self.fecha
+    
+    class Meta:
+        ordering = ["fecha"]
 
 
 class Bovino(Model):

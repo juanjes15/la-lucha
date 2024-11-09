@@ -39,22 +39,22 @@ def home_g(request):
         {
             "name": "Registrar bovino",
             "url": reverse("create_bovino"),
-            "img": "https://i.imgur.com/8At2a8G.jpeg",
+            "img": "https://i.imgur.com/gIhLm9z.jpeg",
         },
         {
             "name": "Registrar compra",
             "url": reverse("create_compra"),
-            "img": "https://i.imgur.com/M9RvBpQ.jpeg",
+            "img": "https://i.imgur.com/CpmmhsG.jpeg",
         },
         {
             "name": "Registrar venta",
             "url": reverse("create_venta"),
-            "img": "https://i.imgur.com/t1yJeSc.jpeg",
+            "img": "https://i.imgur.com/kTgh73e.jpeg",
         },
         {
             "name": "Registrar vacuna",
             "url": reverse("create_vacuna"),
-            "img": "https://i.imgur.com/zeOYtE3.jpeg",
+            "img": "https://i.imgur.com/S1XnKpq.jpeg",
         },
     ]
 
@@ -63,22 +63,22 @@ def home_g(request):
         {
             "name": "Bovinos vendidos",
             "url": reverse("all_bovinos"),
-            "img": "https://i.imgur.com/8At2a8G.jpeg",
+            "img": "https://i.imgur.com/sJYrFgc.jpeg",
         },
         {
             "name": "Compras",
             "url": reverse("all_compras"),
-            "img": "https://i.imgur.com/M9RvBpQ.jpeg",
+            "img": "https://i.imgur.com/CpmmhsG.jpeg",
         },
         {
             "name": "Ventas",
             "url": reverse("all_ventas"),
-            "img": "https://i.imgur.com/t1yJeSc.jpeg",
+            "img": "https://i.imgur.com/kTgh73e.jpeg",
         },
         {
             "name": "Vacunas",
             "url": reverse("all_vacunas"),
-            "img": "https://i.imgur.com/zeOYtE3.jpeg",
+            "img": "https://i.imgur.com/S1XnKpq.jpeg",
         },
     ]
 

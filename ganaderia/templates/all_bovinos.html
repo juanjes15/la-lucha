@@ -5,7 +5,7 @@
     <h2 class="h3 text-dark-green mb-4">Historial de bovinos vendidos</h2>
     <div class="card border-0 shadow-sm">
         <div class="card-body">
-            <form action="{% url 'home_g' %}" class="mb-4">
+            <form action="{% url 'all_bovinos' %}" class="mb-4">
                 <div class="input-group">
                     <input type="text" class="form-control" name="q" value="{{ request.GET.q }}"
                         placeholder="Buscar por nombre, fecha de nacimiento o madre">

@@ -1,0 +1,22 @@
+Casos de uso iniciales:
+
+- Registrar un nacimiento de un bovino
+- Registrar una compra de uno o varios bovinos
+- Registrar una venta de uno o varios bovinos
+- Consultar la información de cualquier bovino registrado
+- Consultar la información de cualquier compra realizada
+- Consultar la información de cualquier venta realizada
+- "Topizar" cualquier bovino registrado
+- Registrar el proceso de vacunación de uno o varios bovinos
+
+Casos de uso adicionales:
+
+- Editar la información de cualquier bovino registrado
+- Editar la información de una venta
+- Editar la información de una compra
+- Editar la información de una vacunación
+- Consultar todos los bovinos vendidos
+- Consultar todas las compras realizadas
+- Consultar todas las ventas realizadas
+- Consultar todas las vacunas realizadas
+- "Capar" cualquier novillo registrado

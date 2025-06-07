@@ -1,0 +1,29 @@
+adjuntar fotos del bovino
+capadas antes del año de edad
+revisar nuevamente models.py, aplicar validaciones
+filtrar busqueda por edad de los bovinos
+
+ALIMENTO
+fecha - tipo - marca - peso - precio
+14-nov // sal // refisal // 30 kg // $100.000
+
+sal
+purina
+repila
+melaza
+
+CONTRATO POTREROS
+fecha - actividad(es) - potrero(s) - tiempo - responsable(s) - precio
+11-ene // fumigo // medio dia // Casi compadre // $80.000
+
+fumigo
+tala
+limpieza (guadaña)
+limpieza (charapo/machete)
+fertilizante
+
+admin        -> eIpe@Qb1$O9C1josf1FK
+anadorishi65 -> y5#AQv6fjD
+
+https://lalucha.pythonanywhere.com
+https://github.com/juanjes15/la-lucha
